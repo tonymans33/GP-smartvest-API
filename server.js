@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 var app = require('./app');
 
@@ -15,9 +16,20 @@ process.on('uncaughtException', err => {
 
 
 // Start the server
-const port = process.env.PORT;
+const port = process.env.PORT
 app.listen(port, () => {
     console.log(`Application is running on http://localhost:${port}`);
+});
+
+const DB_URL = process.env.SERVER_URL
+
+mongoose.connect(DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(con => {
+    console.log('DB connection Successfully!');
+}).catch((e) => {
+    console.log(e)
 });
 
 

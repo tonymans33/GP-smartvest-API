@@ -14,7 +14,11 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "firebase": "^9.8.0",
+    "firebase-admin": "^10.2.0",
+    "generate-api-key": "^1.0.0",
+    "mongoose": "^6.3.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
