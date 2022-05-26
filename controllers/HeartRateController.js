@@ -24,6 +24,25 @@ exports.insertOneRead = async (req, res, next) => {
     } 
 }
 
+
+exports.getLatestRead = async (req, res, next) => {
+
+    try{
+        const heartRate = await HeartRate.find().limit(1).sort({$natural:-1})
+
+        res.status(200).json({
+            status: "success",
+            data: heartRate,
+        })
+    } catch (e){
+        res.status(400).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+}
+
+
 const checkStatus = (read) => {
     if(read > 100){
         return "danger"

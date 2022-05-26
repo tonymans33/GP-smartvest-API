@@ -24,12 +24,32 @@ exports.insertOneRead = async (req, res, next) => {
     } 
 }
 
+exports.getLatestRead = async (req, res, next) => {
+
+    try{
+        const temo = await Temp.find().limit(1).sort({$natural:-1})
+
+        res.status(200).json({
+            status: "success",
+            data: temp,
+        })
+    } catch (e){
+        res.status(400).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+}
+
+
 const checkStatus = (read) => {
-    if(read > 32){
+    if(read >= 40){
         return "danger"
-    } else if(read > 31){
+    } else if(read > 38.8){
         return "warning"
-    } else {
+    } else if(read >= 36.5 && read <= 38.4) {
         return "good"
+    } else{
+        return "undefined"
     }
 }

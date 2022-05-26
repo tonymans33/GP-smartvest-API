@@ -9,6 +9,8 @@ router.get('/oxy', (req, res) => {
 });
 
 router.post('/insertOxy', OxyController.insertOneRead);
+router.get('/getLatestRead', OxyController.getLatestRead)
+
         
 
 module.exports = router

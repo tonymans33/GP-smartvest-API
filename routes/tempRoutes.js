@@ -9,6 +9,8 @@ router.get('/temp', (req, res) => {
 });
 
 router.post('/insertTemp', TempController.insertOneRead);
+router.get('/getLatestRead', TempController.getLatestRead)
+
         
 
 module.exports = router
