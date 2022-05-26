@@ -27,7 +27,7 @@ exports.insertOneRead = async (req, res, next) => {
 exports.getLatestRead = async (req, res, next) => {
 
     try{
-        const temo = await Temp.find().limit(1).sort({$natural:-1})
+        const temp = await Temp.find().limit(1).sort({$natural:-1})
 
         res.status(200).json({
             status: "success",

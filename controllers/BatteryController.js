@@ -44,15 +44,8 @@ exports.getLatestRead = async (req, res, next) => {
 }
 
 const checkStatus = (read) => {
-    if(read > 0){
-        fcm.sendNotification(`Battery is low! ${read} %`, 'ddTCNIVgT3eI4tN55H8KSm:APA91bEKZwf3RdPEtQBRZuqWOWqJ0qldKm1Xi3w_qc8e8971a7wGo8_c24x22ySnmzV-4JFizX4Jx98IaKMfUuvXld82JBoxBL2Ix-PV-b5WaQuCaYFMYybden2GmwXnQjMR0SH0bSvM', 'https://i.dlpng.com/static/png/6415079_preview.png')
-        return "danger"
+    if(read <= 90){
+        fcm.sendNotification("Battery Status", `Battery is running out! ${read} %`, 'ddTCNIVgT3eI4tN55H8KSm:APA91bEKZwf3RdPEtQBRZuqWOWqJ0qldKm1Xi3w_qc8e8971a7wGo8_c24x22ySnmzV-4JFizX4Jx98IaKMfUuvXld82JBoxBL2Ix-PV-b5WaQuCaYFMYybden2GmwXnQjMR0SH0bSvM', 'https://i.dlpng.com/static/png/6415079_preview.png')
+        return "low"
     }
-    //  else if(read > 38.8){
-    //     return "warning"
-    // } else if(read >= 36.5 && read <= 38.4) {
-    //     return "good"
-    // } else{
-    //     return "undefined"
-    // }
 }
