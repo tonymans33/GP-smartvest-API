@@ -1,6 +1,7 @@
 var pdf = require("pdf-creator-node")
 var fs = require("fs");
 var path = require("path");
+const fire = require ('../utils/firebase');
 
 // Read HTML Template
 var html = fs.readFileSync(path.resolve("assets", 'templateAll.html'),{ encoding:'utf-8' });
@@ -49,15 +50,22 @@ var users = [
   };
 
 
-exports.reportAll = (req, res, next) => {
+exports.reportAll = async (req, res, next) => {
 
     try{
-        pdf.create(document, options)
+        await pdf.create(document, options).then(async () => {
 
-        res.status(201).json({
-            status: "success",
-            message: "Report created successfully !"
+            const link = await fire.uploadFile('./output.pdf', 'report2.pdf')
+            console.log(link)
+
+            res.status(201).json({
+                status: "success",
+                link: link,
+                message: "Report created successfully !"
+            })
         })
+        
+        // fs.unlinkSync(path)
 
     }catch(e){
         res.status(400).json({
