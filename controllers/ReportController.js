@@ -2,6 +2,9 @@ var pdf = require("pdf-creator-node")
 var fs = require("fs");
 var path = require("path");
 const fire = require ('../utils/firebase');
+const HeartRateController = require('./HeartRateController')
+const TempController = require('./TempController')
+const OxyController = require('./OxyController')
 
 // Read HTML Template
 var html = fs.readFileSync(path.resolve("assets", 'templateAll.html'),{ encoding:'utf-8' });
@@ -45,27 +48,31 @@ var users = [
     data: {
       users: users,
     },
-    path: "./output.pdf",
+    path: "./reportAll.pdf",
     type: "",
   };
 
 
 exports.reportAll = async (req, res, next) => {
+    console.log('here')
 
     try{
         await pdf.create(document, options).then(async () => {
 
-            const link = await fire.uploadFile('./output.pdf', 'report2.pdf')
-            console.log(link)
+            reportName = 'reportAll.pdf'
+            const link = await fire.uploadFile(document.path, reportName)
 
             res.status(201).json({
                 status: "success",
                 link: link,
+                name: reportName,
                 message: "Report created successfully !"
             })
+
+            fs.unlinkSync(document.path)
         })
         
-        // fs.unlinkSync(path)
+       
 
     }catch(e){
         res.status(400).json({
@@ -78,19 +85,19 @@ exports.reportAll = async (req, res, next) => {
 
 exports.reportSpecific = (req, res, next) => {
 
-    try{
-        pdf.create(document, options)
+    const spec = req.params.spec
 
-        res.status(201).json({
-            status: "success",
-            message: "Report created successfully !"
-        })
-
-    }catch(e){
-        res.status(400).json({
-            status: "fail",
-            message: e.message
-        })
+    switch(spec){
+        case 'heart':
+            HeartRateController.report(req, res, next)
+            break
+        case 'temp':
+            TempController.report(req, res, next)
+            break
+        case 'oxy':
+            OxyController.report(req, res, next)
+            break
+        default:
+            this.reportAll(req, res, next)
     }
-
 }

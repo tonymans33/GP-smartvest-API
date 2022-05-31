@@ -19,6 +19,7 @@
     "firebase": "^9.8.0",
     "firebase-admin": "^10.2.0",
     "generate-api-key": "^1.0.0",
+    "html-pdf": "^3.0.1",
     "mongoose": "^6.3.4",
     "pdf-creator-node": "^2.3.4",
     "uuid": "^8.3.2"
