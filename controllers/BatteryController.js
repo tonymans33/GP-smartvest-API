@@ -33,7 +33,8 @@ exports.getLatestRead = async (req, res, next) => {
 
         res.status(200).json({
             status: "success",
-            data: battery,
+            read: battery[0].read,
+            message: "battery retrieved successfully !"
         })
     } catch (e){
         res.status(400).json({

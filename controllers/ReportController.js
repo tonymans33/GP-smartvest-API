@@ -54,7 +54,6 @@ var users = [
 
 
 exports.reportAll = async (req, res, next) => {
-    console.log('here')
 
     try{
         await pdf.create(document, options).then(async () => {

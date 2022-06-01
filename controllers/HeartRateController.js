@@ -80,7 +80,7 @@ exports.getLatestRead = async (req, res, next) => {
 
         res.status(200).json({
             status: "success",
-            data: heartRate,
+            read: heartRate[0].read,
         })
     } catch (e){
         res.status(400).json({
