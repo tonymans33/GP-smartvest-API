@@ -19,8 +19,7 @@ exports.uploadFile = async (path, filename) => {
       }
   });
 
-  return storageLink[0].metadata.mediaLink;
-  
+  return storageLink[0].metadata.mediaLink; 
 }
 
 

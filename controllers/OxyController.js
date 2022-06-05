@@ -4,52 +4,6 @@ var fs = require("fs");
 var path = require("path");
 const fire = require ('../utils/firebase');
 
-var html = fs.readFileSync(path.resolve("assets", 'templateAll.html'),{ encoding:'utf-8' });
-
-var options = {
-    format: "A5",
-    orientation: "portrait",
-    border: "10mm",
-    header: {
-        height: "45mm",
-        contents: '<div style="text-align: center;">Author: Shyam Hajare</div>'
-    },
-    footer: {
-        height: "28mm",
-        contents: {
-            first: 'Cover page',
-            2: 'Second page', // Any page number is working. 1-based index
-            default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            last: 'Last Page'
-        }
-    }
-};
-
-var users = [
-    {
-      name: "Shyam",
-      age: "26",
-    },
-    {
-      name: "Navjot",
-      age: "26",
-    },
-    {
-      name: "Vitthal",
-      age: "26",
-    },
-  ];
-
-  var document = {
-    html: html,
-    data: {
-      users: users,
-    },
-    path: "./reportOxy.pdf",
-    type: "",
-  };
-
-
 exports.insertOneRead = async (req, res, next) => {
 
     try{
@@ -80,7 +34,7 @@ exports.getLatestRead = async (req, res, next) => {
         const oxy = await Oxy.find().limit(1).sort({$natural:-1})
 
         res.status(200).json({
-            status: "success",
+            status: checkStatus(oxy[0].status),
             read: oxy[0].read,
             message: "oxy retrieved successfully !"
 
@@ -93,7 +47,23 @@ exports.getLatestRead = async (req, res, next) => {
     }
 }
 
-exports.report = async (req, res, next) => {
+exports.report = async (req, res, next, options) => {
+
+    var html = fs.readFileSync(path.resolve("assets", 'oxyReport.html'),{ encoding:'utf-8' });
+    const oxy = await Oxy.find().limit(1).sort({$natural:-1})
+    const date = new Date()
+
+    var document = {
+        html: html,
+        data: {
+            name: "Tony Mansour Grant",
+            oxy: oxy[0].read,
+            date: date.toLocaleString(),
+            },
+        path: "./reportOxy.pdf",
+        type: "",
+    };
+
 
     try{
         await pdf.create(document, options).then(async () => {
@@ -122,12 +92,32 @@ exports.report = async (req, res, next) => {
 
 }
 
+exports.searchByDate = async (req, res, next) => {
+    
+    try{
+        const oxy = await Oxy.find({date: req.params.date})
+
+        res.status(200).json({
+            status: "success",
+            read: oxy[0].read,
+            message: "oxy found successfully !"
+        })
+
+    } catch (e){
+        res.status(400).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+}
+
+
 const checkStatus = (read) => {
-    if(read > 100){
-        return "danger"
-    } else if(read > 80){
+    if(read < 94){
         return "warning"
-    } else {
+    } else if(read > 94 && read < 100){
         return "good"
+    } else {
+        return "danger"
     }
 }

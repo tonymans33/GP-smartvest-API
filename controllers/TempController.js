@@ -5,52 +5,6 @@ var fs = require("fs");
 var path = require("path");
 const fire = require ('../utils/firebase');
 
-var html = fs.readFileSync(path.resolve("assets", 'templateAll.html'),{ encoding:'utf-8' });
-
-var options = {
-    format: "A5",
-    orientation: "portrait",
-    border: "10mm",
-    header: {
-        height: "45mm",
-        contents: '<div style="text-align: center;">Author: Shyam Hajare</div>'
-    },
-    footer: {
-        height: "28mm",
-        contents: {
-            first: 'Cover page',
-            2: 'Second page', // Any page number is working. 1-based index
-            default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            last: 'Last Page'
-        }
-    }
-};
-
-var users = [
-    {
-      name: "Shyam",
-      age: "26",
-    },
-    {
-      name: "Navjot",
-      age: "26",
-    },
-    {
-      name: "Vitthal",
-      age: "26",
-    },
-  ];
-
-  var document = {
-    html: html,
-    data: {
-      users: users,
-    },
-    path: "./reportTemp.pdf",
-    type: "",
-  };
-
-
 exports.insertOneRead = async (req, res, next) => {
 
     try{
@@ -80,8 +34,9 @@ exports.getLatestRead = async (req, res, next) => {
         const temp = await Temp.find().limit(1).sort({$natural:-1})
 
         res.status(200).json({
-            status: "success",
+            status: checkStatus(temp[0].read),
             read: temp[0].read,
+            
         })
     } catch (e){
         res.status(400).json({
@@ -91,7 +46,43 @@ exports.getLatestRead = async (req, res, next) => {
     }
 }
 
-exports.report = async (req, res, next) => {
+exports.searchByDate = async (req, res, next) => {
+    
+        try{
+            const temp = await Temp.find({date: req.params.date})
+    
+            res.status(200).json({
+                status: "success",
+                read: temp[0].read,
+                message: "Temp found successfully !"
+            })
+    
+        } catch (e){
+            res.status(400).json({
+                status: "fail",
+                message: e.message
+            })
+        }
+}
+
+
+exports.report = async (req, res, next, options) => {
+
+    var html = fs.readFileSync(path.resolve("assets", 'tempReport.html'),{ encoding:'utf-8' });
+    const temp = await Temp.find().limit(1).sort({$natural:-1})
+    const date = new Date()
+
+    var document = {
+        html: html,
+        data: {
+        name: "Tony Mansour Grant",
+        temp: temp[0].read,
+        date : date.toLocaleString(),
+        },
+        path: "./reportTemp.pdf",
+        type: "",
+    };
+
 
     try{
         await pdf.create(document, options).then(async () => {
@@ -132,6 +123,6 @@ const checkStatus = (read) => {
     } else if(read >= 36.5 && read <= 38.4) {
         return "good"
     } else{
-        return "undefined"
+        return "good"
     }
 }

@@ -10,6 +10,7 @@ router.get('/heartRate', (res) => {
 
 router.post('/insertHeartRate', HeartRateController.insertOneRead);
 router.get('/getLatestRead', HeartRateController.getLatestRead)
-        
+router.get('/searchByDate/:date', HeartRateController.searchByDate)
+  
 
 module.exports = router
