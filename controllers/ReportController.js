@@ -16,8 +16,6 @@ var options = {
     border: "10mm",
 };
 
-
-
 exports.reportAll = async (req, res, next) => {
 
     try{
