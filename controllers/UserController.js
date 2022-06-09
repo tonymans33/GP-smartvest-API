@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
 const mongoose = require('mongoose');
+const fcm = require('../utils/fcm');
 
 exports.insertUser = (req, res, next) => {
     
@@ -16,11 +17,14 @@ exports.insertUser = (req, res, next) => {
                 deviceToken : req.body.deviceToken
             });
     
-            user.save().then(result => {
+            user.save().then(() => {
+
+                fcm.sendNotification("Smart Vest", `Welcome to smart vest  ${user.username} `, user.deviceToken)
                 res.status(201).json({
                     status: "success",
                     message: "User created successfully !"
                 })
+
             }).catch(err => {
                 res.status(500).json({
                     status: "fail",
