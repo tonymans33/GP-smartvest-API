@@ -11,6 +11,7 @@ exports.insertUser = (req, res, next) => {
                 username: req.body.username,
                 email: req.body.email,
                 date: new Date(),
+                age: req.body.age,
                 emergencyNumber: req.body.emergencyNumber,
                 deviceToken : req.body.deviceToken
             });
@@ -35,3 +36,21 @@ exports.insertUser = (req, res, next) => {
         }
     
     }
+
+exports.getUser = async (req, res, next) => {
+
+    try {
+        const user = await User.find({uid: req.params.uid});
+
+        res.status(200).json({
+            status: "success",
+            user,
+        })
+    } catch (e){
+        res.status(500).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+    
+}

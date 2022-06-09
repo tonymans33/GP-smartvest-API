@@ -20,6 +20,9 @@ const UserSchema = new mongoose.Schema({
     },
     emergencyNumber:{
         type: String,
+    },
+    age:{
+        type: String,
     }
 })
 
