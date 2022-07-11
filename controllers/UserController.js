@@ -66,8 +66,8 @@ exports.loginUser = async (req, res) => {
     try{
         const user = await User.find({uid: req.body.uid});
         const record = await new LoggedUserModel({
-            uid: user.uid,
-            username: user.username,
+            uid: user[0].uid,
+            username: user[0].username,
             date: new Date()
         })
         record.save().then(() => {
