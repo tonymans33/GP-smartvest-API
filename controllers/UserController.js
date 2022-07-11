@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const fcm = require('../utils/fcm');
+const LoggedUserModel = require('../models/loggedUserModel');
 
 exports.insertUser = (req, res, next) => {
     
@@ -18,6 +19,7 @@ exports.insertUser = (req, res, next) => {
             });
     
             user.save().then(() => {
+                console.log(user.deviceToken)
 
                 fcm.sendNotification("Smart Vest", `Welcome to smart vest  ${user.username} `, user.deviceToken)
                 res.status(201).json({
@@ -57,4 +59,27 @@ exports.getUser = async (req, res, next) => {
         })
     }
     
+}
+
+exports.loginUser = async (req, res) => {
+    try{
+        const user = await User.find({uid: req.body.uid});
+        const record = await new LoggedUserModel({
+            uid: user.uid,
+            username: user.username,
+            date: new Date()
+        })
+
+        
+        res.status(200).json({
+            status: "success",
+            record,
+        })
+
+    } catch (e){
+        res.status(500).json({
+            status: "fail",
+            message: e.message
+        })
+    }
 }

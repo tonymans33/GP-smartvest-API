@@ -3,6 +3,8 @@ var pdf = require("pdf-creator-node")
 var fs = require("fs");
 var path = require("path");
 const fire = require ('../utils/firebase');
+const LoggedUserModel = require("../models/loggedUserModel");
+
 
 
 exports.insertOneRead = async (req, res, next) => {
@@ -50,13 +52,14 @@ exports.report = async (req, res, next, options) => {
 
     var html = fs.readFileSync(path.resolve("assets", 'heartReport.html'),{ encoding:'utf-8' })
     const heartRate = await HeartRate.find().limit(1).sort({$natural:-1})
+    const user = await LoggedUserModel.find().limit(1).sort({$natural:-1})
     const date = new Date()
 
 
     var document = {
         html: html,
         data: {
-            name: "Tony Mansour Grant",
+            name: user[0].username,
             heart: heartRate[0].read,
             date: date.toLocaleString(),
             },

@@ -10,6 +10,7 @@ router.get('/user', (req, res) => {
 
 router.post('/insertUser', UserController.insertUser);
 router.get('/getUser/:uid', UserController.getUser);
+router.post('/loginUser', UserController.loginUser);
 
         
  

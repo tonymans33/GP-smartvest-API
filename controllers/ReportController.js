@@ -7,7 +7,8 @@ const TempController = require('./TempController')
 const OxyController = require('./OxyController')
 const Temp = require('../models/TempModel')
 const Oxy = require('../models/OxyModel')
-const HeartRate = require('../models/HeartRateModel')
+const HeartRate = require('../models/HeartRateModel');
+const LoggedUserModel = require("../models/loggedUserModel");
 
 // Read HTML Template
 var options = {
@@ -25,12 +26,13 @@ exports.reportAll = async (req, res, next) => {
         const heartRate = await HeartRate.find().limit(1).sort({$natural:-1})
         const temp = await Temp.find().limit(1).sort({$natural:-1})
         const oxy = await Oxy.find().limit(1).sort({$natural:-1})
+        const user = await LoggedUserModel.find().limit(1).sort({$natural:-1})
         const date = new Date()
 
         var document = {
             html: html,
             data: {
-              name: "Tony Mansour",
+              name: user[0].username,
               temp: temp[0].read,
               heart: heartRate[0].read,
               oxy: oxy[0].read,
@@ -38,7 +40,7 @@ exports.reportAll = async (req, res, next) => {
             },
             path: "./reportAll.pdf",
             type: "",
-          };
+          }
 
         await pdf.create(document, options).then(async () => {
 
@@ -82,3 +84,4 @@ exports.reportSpecific = (req, res, next) => {
             this.reportAll(req, res, next)
     }
 }
+
