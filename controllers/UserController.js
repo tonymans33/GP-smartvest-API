@@ -47,6 +47,7 @@ exports.getUser = async (req, res, next) => {
 
     try {
         const user = await User.find({uid: req.params.uid});
+        
 
         res.status(200).json({
             status: "success",
@@ -69,12 +70,16 @@ exports.loginUser = async (req, res) => {
             username: user.username,
             date: new Date()
         })
-
-        
-        res.status(200).json({
+        record.save().then(() => {
+            res.status(200).json({
             status: "success",
             record,
         })
+        }
+            
+
+        
+        
 
     } catch (e){
         res.status(500).json({
