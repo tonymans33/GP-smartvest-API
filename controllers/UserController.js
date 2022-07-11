@@ -74,11 +74,8 @@ exports.loginUser = async (req, res) => {
             res.status(200).json({
             status: "success",
             record,
+            })
         })
-        }
-            
-
-        
         
 
     } catch (e){
