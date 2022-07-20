@@ -144,7 +144,7 @@ const checkStatus = (read) => {
         return "danger"
     } else if(read > 38.8){
         return "warning"
-    } else if(read >= 36.5 && read <= 37.4) {
+    } else if(read >= 36.5 && read <= 37.5) {
         return "good"
     } else{
         return "warning"
