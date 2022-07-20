@@ -11,6 +11,7 @@ router.get('/temp', (req, res) => {
 router.post('/insertTemp', TempController.insertOneRead);
 router.get('/getLatestRead', TempController.getLatestRead)
 router.get('/searchByDate/:date', TempController.searchByDate)
+router.get('/getLatestReads', TempController.getReads)
 
         
 

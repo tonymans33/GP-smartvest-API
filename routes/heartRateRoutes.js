@@ -8,9 +8,11 @@ router.get('/heartRate', (res) => {
     console.log("heartRate!")
 });
 
-router.post('/insertHeartRate', HeartRateController.insertOneRead);
+router.post('/insertHeartRate', HeartRateController.insertOneRead)
 router.get('/getLatestRead', HeartRateController.getLatestRead)
 router.get('/searchByDate/:date', HeartRateController.searchByDate)
+router.get('/getLatestReads', HeartRateController.getReads)
+
   
 
 module.exports = router

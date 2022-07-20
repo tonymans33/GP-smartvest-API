@@ -31,6 +31,22 @@ exports.insertOneRead = async (req, res, next) => {
     } 
 }
 
+exports.getReads = async (req, res, next) => {
+
+    try{
+        const hearts = await HeartRate.find().limit(3).sort({$natural:-1})
+
+        res.status(200).json({
+            hearts: hearts,
+        })
+    } catch (e){
+        res.status(400).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+}
+
 
 exports.getLatestRead = async (req, res, next) => {
 
@@ -118,7 +134,7 @@ exports.searchByDate = async (req, res, next) => {
 
 const checkStatus = (read) => {
     if(read > 200){
-        vonage.sendSms('Alert: your friend is having a very high heart rate!!')
+        // vonage.sendSms('Alert: your friend is having a very high heart rate!!')
         return "danger"
     } else if(read >= 90 && read <= 250){
         return "good"

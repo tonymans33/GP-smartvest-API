@@ -29,6 +29,22 @@ exports.insertOneRead = async (req, res, next) => {
     } 
 }
 
+exports.getReads = async (req, res, next) => {
+
+    try{
+        const oxys = await Oxy.find().limit(3).sort({$natural:-1})
+
+        res.status(200).json({
+            oxys: oxys,
+        })
+    } catch (e){
+        res.status(400).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+}
+
 
 exports.getLatestRead = async (req, res, next) => {
 
