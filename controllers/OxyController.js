@@ -10,6 +10,7 @@ exports.insertOneRead = async (req, res, next) => {
 
     try{
 
+        req.body.read = 95
         req.body.status = checkStatus(req.body.read)
         req.body.date = new Date()
     
