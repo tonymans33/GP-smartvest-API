@@ -117,6 +117,7 @@ exports.searchByDate = async (req, res, next) => {
 
 const checkStatus = (read) => {
     if(read > 200){
+        vonage.sendSms('Alert: your friend is having a very high heart rate!!')
         return "danger"
     } else if(read >= 90 && read <= 250){
         return "good"
