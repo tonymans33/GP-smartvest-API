@@ -12,7 +12,6 @@ exports.insertOneRead = async (req, res, next) => {
 
     try{
 
-        req.body.read = 37.5
         req.body.status = checkStatus(req.body.read)
         req.body.date = new Date()  
     
@@ -67,6 +66,25 @@ exports.getReads = async (req, res, next) => {
     }
 }
 
+exports.getRead = async (req, res, next) =>  {
+    try{
+        const limit = req.params.limit
+        const temp = await Temp.find().skip(limit).limit(1).sort({$natural:-1})
+
+        res.status(200).json({
+            status: checkStatus(temp[0].read),
+            read: temp[0].read,
+            date: temp[0].date,
+        
+        })
+    } catch (e){
+        res.status(400).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+}
+
 exports.searchByDate = async (req, res, next) => {
     
         try{
@@ -100,6 +118,7 @@ exports.report = async (req, res, next, options) => {
         data: {
         name: user[0].username,
         temp: temp[0].read,
+        status: temp[0].status,
         date : date.toLocaleString(),
         },
         path: "./reportTemp.pdf",

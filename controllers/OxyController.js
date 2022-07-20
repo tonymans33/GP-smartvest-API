@@ -10,7 +10,6 @@ exports.insertOneRead = async (req, res, next) => {
 
     try{
 
-        req.body.read = 95
         req.body.status = checkStatus(req.body.read)
         req.body.date = new Date()
     
@@ -66,6 +65,26 @@ exports.getLatestRead = async (req, res, next) => {
     }
 }
 
+
+exports.getRead = async (req, res, next) =>  {
+    try{
+        const limit = req.params.limit
+        const oxy = await Oxy.find().skip(limit).limit(1).sort({$natural:-1})
+
+        res.status(200).json({
+            status: checkStatus(oxy[0].read),
+            read: oxy[0].read,
+            date: oxy[0].date,
+        
+        })
+    } catch (e){
+        res.status(400).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+}
+
 exports.report = async (req, res, next, options) => {
 
     var html = fs.readFileSync(path.resolve("assets", 'oxyReport.html'),{ encoding:'utf-8' });
@@ -78,6 +97,7 @@ exports.report = async (req, res, next, options) => {
         data: {
             name: user[0].username,
             oxy: oxy[0].read,
+            status: oxy[0].status,
             date: date.toLocaleString(),
             },
         path: "./reportOxy.pdf",

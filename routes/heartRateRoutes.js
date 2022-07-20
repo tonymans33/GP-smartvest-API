@@ -12,6 +12,7 @@ router.post('/insertHeartRate', HeartRateController.insertOneRead)
 router.get('/getLatestRead', HeartRateController.getLatestRead)
 router.get('/searchByDate/:date', HeartRateController.searchByDate)
 router.get('/getLatestReads', HeartRateController.getReads)
+router.get('/getRead/:limit', HeartRateController.getRead)
 
   
 

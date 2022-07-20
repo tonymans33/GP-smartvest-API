@@ -11,7 +11,6 @@ const vonage = require('../utils/vonage')
 exports.insertOneRead = async (req, res, next) => {
 
     try{
-        req.body.read = 92
         req.body.status = checkStatus(req.body.read)
         req.body.date = new Date()
     
@@ -65,6 +64,26 @@ exports.getLatestRead = async (req, res, next) => {
     }
 }
 
+
+exports.getRead = async (req, res, next) =>  {
+    try{
+        const limit = req.params.limit
+        const heart = await HeartRate.find().skip(limit).limit(1).sort({$natural:-1})
+
+        res.status(200).json({
+            status: checkStatus(heart[0].read),
+            read: heart[0].read,
+            date: heart[0].date,
+        
+        })
+    } catch (e){
+        res.status(400).json({
+            status: "fail",
+            message: e.message
+        })
+    }
+}
+
 exports.report = async (req, res, next, options) => {
 
     var html = fs.readFileSync(path.resolve("assets", 'heartReport.html'),{ encoding:'utf-8' })
@@ -78,6 +97,7 @@ exports.report = async (req, res, next, options) => {
         data: {
             name: user[0].username,
             heart: heartRate[0].read,
+            status: heartRate[0].status,
             date: date.toLocaleString(),
             },
         path: "./reportHeartRate.pdf",
@@ -139,6 +159,6 @@ const checkStatus = (read) => {
     } else if(read >= 90 && read <= 250){
         return "good"
     } else {
-        return "good"
+        return "warning"
     }
 }

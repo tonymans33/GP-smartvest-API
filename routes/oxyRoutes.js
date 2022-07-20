@@ -12,6 +12,8 @@ router.post('/insertOxy', OxyController.insertOneRead);
 router.get('/getLatestRead', OxyController.getLatestRead)
 router.get('/searchByDate/:date', OxyController.searchByDate)
 router.get('/getLatestReads', OxyController.getReads)
+router.get('/getRead/:limit', OxyController.getRead)
+
 
 
         
