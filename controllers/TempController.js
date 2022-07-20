@@ -72,7 +72,7 @@ exports.getRead = async (req, res, next) =>  {
         const temp = await Temp.find().skip(limit).limit(1).sort({$natural:-1})
 
         res.status(200).json({
-            status: checkStatus(temp[0].read),
+            status: checkStatusWithoutSMS(temp[0].read),
             read: temp[0].read,
             date: temp[0].date,
         
@@ -160,6 +160,19 @@ const checkStatus = (read) => {
     
     if(read >= 40){
         vonage.sendSms('Alert: your friend is having a very high temperature!!')
+        return "danger"
+    } else if(read > 38.8){
+        return "warning"
+    } else if(read >= 36.5 && read <= 37.5) {
+        return "good"
+    } else{
+        return "warning"
+    }
+}
+
+const checkStatusWithoutSMS = (read) => {
+
+    if(read >= 40){
         return "danger"
     } else if(read > 38.8){
         return "warning"
