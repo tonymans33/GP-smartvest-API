@@ -3,8 +3,9 @@ const fcm = require('../utils/fcm')
 var pdf = require("pdf-creator-node")
 var fs = require("fs");
 var path = require("path");
-const fire = require ('../utils/firebase');
-const LoggedUserModel = require("../models/loggedUserModel");
+const fire = require ('../utils/firebase')
+const LoggedUserModel = require("../models/loggedUserModel")
+const vonage = require('../utils/vonage')
 
 
 exports.insertOneRead = async (req, res, next) => {
@@ -121,12 +122,13 @@ const checkStatus = (read) => {
     fcm.sendNotification("Temperature", `Your temperature is  ${read} %`, 'ddTCNIVgT3eI4tN55H8KSm:APA91bEKZwf3RdPEtQBRZuqWOWqJ0qldKm1Xi3w_qc8e8971a7wGo8_c24x22ySnmzV-4JFizX4Jx98IaKMfUuvXld82JBoxBL2Ix-PV-b5WaQuCaYFMYybden2GmwXnQjMR0SH0bSvM', 'https://upload.wikimedia.org/wikipedia/commons/5/5e/ThermometerHighTemp.png')
     
     if(read >= 40){
+        vonage.sendSms()
         return "danger"
     } else if(read > 38.8){
         return "warning"
-    } else if(read >= 36.5 && read <= 38.4) {
+    } else if(read >= 36.5 && read <= 37.4) {
         return "good"
     } else{
-        return "good"
+        return "warning"
     }
 }

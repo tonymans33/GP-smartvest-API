@@ -9,6 +9,7 @@ const Temp = require('../models/TempModel')
 const Oxy = require('../models/OxyModel')
 const HeartRate = require('../models/HeartRateModel');
 const LoggedUserModel = require("../models/loggedUserModel");
+const User = require("../models/userModel");
 
 // Read HTML Template
 var options = {
@@ -27,6 +28,7 @@ exports.reportAll = async (req, res, next) => {
         const temp = await Temp.find().limit(1).sort({$natural:-1})
         const oxy = await Oxy.find().limit(1).sort({$natural:-1})
         const user = await LoggedUserModel.find().limit(1).sort({$natural:-1})
+        
         const date = new Date()
 
         var document = {
