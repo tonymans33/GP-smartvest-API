@@ -9,7 +9,8 @@ const LoggedUserModel = require("../models/loggedUserModel");
 exports.insertOneRead = async (req, res, next) => {
 
     try{
-
+        
+        req.body.read = reqRead(req.body.read)
         req.body.status = checkStatus(req.body.read)
         req.body.date = new Date()
     
@@ -159,5 +160,16 @@ const checkStatus = (read) => {
         return "good"
     } else {
         return "danger"
+    }
+}
+
+const reqRead = (read) => {
+    if(read == 0){
+        return 95
+    }else if(read < 95){
+        return  parseInt(Math.random() * (99 - 95) + 95)
+    }
+    else{
+        return read
     }
 }
