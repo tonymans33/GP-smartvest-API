@@ -12,7 +12,7 @@ exports.insertOneRead = async (req, res, next) => {
 
     try{
 
-        req.body.read += 2
+        req.body.read += 4
         req.body.status = checkStatus(req.body.read)
         req.body.date = new Date()  
     
