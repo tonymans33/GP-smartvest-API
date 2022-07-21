@@ -1,8 +1,8 @@
 const Vonage = require('@vonage/server-sdk')
 
 const vonage = new Vonage({
-  apiKey: "c8b3ea92",
-  apiSecret: "BimL5trVJZBFmCfy",
+  apiKey: "3525db98",
+  apiSecret: "Bj6BW2NwV28yXzSo",
 })
 
 const from = "Smart vest"
